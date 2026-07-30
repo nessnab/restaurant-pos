@@ -11,10 +11,15 @@ A full-stack restaurant POS built with:
 
 ## Planned Features
 
-- Authentication
-- Menu Management
-- Orders
+### v1
+- Menu management (add, edit, delete, price, category, availability)
+- Categories
+- Cart (notes, discounts and tax)
+- Order History (order items, total payment method/status)
 - Payments
-- Receipt Printing
-- Offline Mode (Phase 2)
-- Multi-Restaurant SaaS (Future)
+- Dashboard (Revenue, sales, best seller per period)
+
+### v2
+- Authentication
+- Receipt printing
+- Enable offline

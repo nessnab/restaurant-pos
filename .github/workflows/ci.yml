@@ -36,6 +36,8 @@ jobs:
 
   backend:
     name: Backend Build
+    env:
+      DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
     runs-on: ubuntu-latest
 
     defaults:

@@ -20,6 +20,7 @@ model Restaurant {
   users       User[]
   categories  Category[]
   menu_items  MenuItem[]
+  orders      Order[]
 
   @@map("restaurants")
 }
@@ -44,6 +45,7 @@ model User {
   updatedAt    DateTime    @updatedAt
 
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
+  orders       Order[]
 
   @@unique([restaurantId, email])
   @@map("users")
@@ -87,6 +89,68 @@ model MenuItem {
 
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
   category      Category   @relation(fields: [categoryId], references: [id])
+  order_items   OrderItem[]
 
   @@map("menu_items")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+}
+
+enum PaymentMethod {
+  CASH
+  QRIS
+}
+
+model Order {
+  id              String        @id @default(uuid())
+  restaurantId    String
+  cashierId       String
+
+  orderNumber     String        @unique
+
+  status          OrderStatus
+
+  paymentMethod   PaymentMethod?
+
+  cashReceived    Int?
+
+  totalAmount     Int
+
+  paidAt          DateTime?
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
+  cashier         User          @relation(fields: [cashierId], references: [id])
+
+  items           OrderItem[]
+
+  @@map("orders")
+  @@unique([restaurantId, orderNumber])
+}
+
+model OrderItem {
+  id            String      @id @default(uuid())
+
+  orderId       String
+
+  menuItemId    String
+
+  menuName      String
+
+  unitPrice     Int
+
+  quantity      Int
+
+  subtotal      Int
+
+  order         Order       @relation(fields: [orderId], references: [id])
+
+  menuItem      MenuItem    @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
 }
