@@ -17,7 +17,9 @@ model Restaurant {
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
-  users     User[]
+  users       User[]
+  categories  Category[]
+  menu_items  MenuItem[]
 
   @@map("restaurants")
 }
@@ -45,4 +47,46 @@ model User {
 
   @@unique([restaurantId, email])
   @@map("users")
+}
+
+model Category {
+  id            String      @id @default(uuid())
+  restaurantId  String
+
+  name          String
+  displayOrder  Int         @default(0)
+
+  isActive      Boolean     @default(true)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  restaurant    Restaurant  @relation(fields: [restaurantId], references: [id])
+  menuItems     MenuItem[]
+
+  @@unique([restaurantId, name])
+  @@map("categories")
+}
+
+model MenuItem {
+  id            String    @id @default(uuid())
+  restaurantId  String
+  categoryId    String
+
+  name          String
+  description   String?
+  price         Decimal   @db.Decimal(10, 2)
+
+  isAvailable   Boolean   @default(true)
+  isActive      Boolean   @default(true)
+
+  displayOrder  Int       @default(0)
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  category      Category   @relation(fields: [categoryId], references: [id])
+
+  @@map("menu_items")
 }
