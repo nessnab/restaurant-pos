@@ -94,11 +94,6 @@ model MenuItem {
   @@map("menu_items")
 }
 
-enum OrderStatus {
-  PENDING
-  PAID
-}
-
 enum PaymentMethod {
   CASH
   QRIS
@@ -110,8 +105,6 @@ model Order {
   cashierId       String
 
   orderNumber     String        @unique
-
-  status          OrderStatus
 
   paymentMethod   PaymentMethod?
 
