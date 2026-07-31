@@ -18,7 +18,7 @@ model Restaurant {
 
   users       User[]
   categories  Category[]
-  menu_items  MenuItem[]
+  menuItems   MenuItem[]
   orders      Order[]
 
   @@map("restaurants")
@@ -34,8 +34,8 @@ model User {
   restaurantId String
 
   name         String
-  email        String?
-  password     String
+  email        String?     @unique
+  passwordHash String
 
   role         Role        @default(CASHIER)
   isActive     Boolean     @default(true)
@@ -46,7 +46,6 @@ model User {
   restaurant   Restaurant  @relation(fields: [restaurantId], references: [id])
   orders       Order[]
 
-  @@unique([restaurantId, email])
   @@map("users")
 }
 
@@ -88,7 +87,7 @@ model MenuItem {
 
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
   category      Category   @relation(fields: [categoryId], references: [id])
-  order_items   OrderItem[]
+  orderItems    OrderItem[]
 
   @@map("menu_items")
 }
@@ -119,7 +118,7 @@ model Order {
   restaurant      Restaurant    @relation(fields: [restaurantId], references: [id])
   cashier         User          @relation(fields: [cashierId], references: [id])
 
-  items           OrderItem[]
+  orderItems      OrderItem[]
 
   @@map("orders")
   @@unique([restaurantId, orderNumber])

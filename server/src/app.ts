@@ -4,6 +4,8 @@ import morgan from "morgan"
 import cors from "cors"
 import cookieParser from "cookie-parser"
 
+import indexRoutes from "./routes/index"
+
 const app = express()
 app.use(cors({
   origin: "http://localhost:5173",
@@ -17,6 +19,8 @@ app.use(cookieParser(process.env.COOKIE_SECRET))
 app.get('/health', (req: Request, res: Response) => {
   res.status(200).json({ status: 'OK' });
 });
+
+app.use("/", indexRoutes)
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Error:', err.stack);
