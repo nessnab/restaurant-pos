@@ -1,13 +1,14 @@
-import prisma from "../prisma/client"
+import type { Prisma } from "@prisma/client";
 
 export class RestaurantRepository {
-  async createRestaurant(name: string, slug:string) {
-    return prisma.restaurant.create({
+  constructor(private prisma: Prisma.TransactionClient) {}
+
+  async createRestaurant(name: string, slug: string) {
+    return this.prisma.restaurant.create({
       data: {
         name,
         slug,
-      }
-    })
-
+      },
+    });
   }
 }
