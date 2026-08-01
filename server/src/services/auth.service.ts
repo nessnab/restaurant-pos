@@ -14,7 +14,6 @@ export class AuthService {
     private restaurantRepository: RestaurantRepository,
     private userEmailRepository: UserEmailRepository
   ) {}
-  
   async login(email: string, password: string) {
     const user = await this.userEmailRepository.findByEmail(email)
     if (!user || !user.isActive) {

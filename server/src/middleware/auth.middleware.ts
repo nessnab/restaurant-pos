@@ -1,10 +1,17 @@
+import prisma from "../prisma/client"
+import jwt from "jsonwebtoken"
 import type { Request, Response, NextFunction } from "express"
 import type { AuthPayload } from "../types/jwt.types"
 import { AppError } from "../utils/AppError"
-import jwt from "jsonwebtoken"
-import prisma from "../prisma/client"
+import type { AuthUser } from "../types/user.types"
 
-export class authMiddleware {
+declare module "express" {
+  interface Request {
+    user?: AuthUser;
+  }
+}
+
+export class AuthMiddleware {
   async authenticate(req: Request, res: Response, next: NextFunction) {
     // get token
     const authHeader = req.headers.authorization
@@ -27,7 +34,15 @@ export class authMiddleware {
     const user = await prisma.user.findUnique({
       where: {
         id: decoded.userId
-      }
+      },
+      select: {
+        id: true,
+        restaurantId: true,
+        name: true,
+        email: true,
+        role: true,
+        isActive: true,
+      },
     });
 
     if (!user || !user.isActive) {

@@ -3,6 +3,10 @@ import type { AuthService } from "../services/auth.service"
 
 export class AuthController {
   constructor(private authService: AuthService){}
+  
+  async me(req: Request, res: Response) {
+    res.status(200).json(req.user);
+  }
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
