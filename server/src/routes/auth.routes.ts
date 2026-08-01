@@ -5,7 +5,7 @@ import { UserEmailRepository, UserRepository } from "../repositories/user.reposi
 import { RestaurantRepository } from "../repositories/restaurant.repository";
 import prisma from "../prisma/client";
 import { validate } from "../middleware/validate";
-import { registerSchema } from "../validators/auth.validator";
+import { registerSchema, loginSchema } from "../validators/auth.validator";
 
 const router = Router();
 
@@ -25,6 +25,12 @@ router.post(
   "/register",
   validate(registerSchema),
   authController.register.bind(authController)
+);
+
+router.post(
+  "/login",
+  validate(loginSchema),
+  authController.login.bind(authController)
 );
 
 export default router;

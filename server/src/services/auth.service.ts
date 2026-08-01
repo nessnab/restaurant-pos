@@ -14,6 +14,40 @@ export class AuthService {
     private restaurantRepository: RestaurantRepository,
     private userEmailRepository: UserEmailRepository
   ) {}
+  
+  async login(email: string, password: string) {
+    const user = await this.userEmailRepository.findByEmail(email)
+    if (!user || !user.isActive) {
+      throw new AppError("Invalid email or password", 401)
+    }
+    const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
+    if (!isPasswordValid) {
+      throw new AppError("Invalid email or password", 401)
+    }
+
+    const token = jwt.sign(
+      {
+        userId: user.id,
+        restaurantId: user.restaurantId,
+        role: user.role,
+      },
+      process.env.JWT_SECRET || "secret",
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    return {
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      }
+    }
+  }
+
   async register(data: RegisterInput) {    
     const { restaurantName, ownerName, email, password } = data
     
