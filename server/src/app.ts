@@ -5,6 +5,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 
 import indexRoutes from "./routes/index"
+import authRoutes from "./routes/auth.routes";
 
 const app = express()
 app.use(cors({
@@ -21,6 +22,7 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 app.use("/", indexRoutes)
+app.use("/auth", authRoutes);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.error('Unhandled Error:', err.stack);
