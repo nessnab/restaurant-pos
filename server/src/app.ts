@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 
 import indexRoutes from "./routes/index"
 import authRoutes from "./routes/auth.routes";
+import { errorHandler } from "./middleware/errorHandler"
 
 const app = express()
 app.use(cors({
@@ -25,12 +26,7 @@ app.get('/health', (req: Request, res: Response) => {
 app.use("/", indexRoutes)
 app.use("/auth", authRoutes);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error('Unhandled Error:', err.stack);
-  res.status(500).json({
-    error: 'Internal Server Error',
-    message: process.env.NODE_ENV === 'development' ? err.message : undefined,
-  });
-});
+// Error handling middleware
+app.use(errorHandler);
 
 export default app
