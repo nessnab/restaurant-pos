@@ -34,7 +34,7 @@ model User {
   restaurantId String
 
   name         String
-  email        String?     @unique
+  email        String?      @unique
   passwordHash String
 
   role         Role        @default(CASHIER)

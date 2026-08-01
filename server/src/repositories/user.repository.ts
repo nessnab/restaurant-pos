@@ -9,12 +9,12 @@ export class UserRepository {
     });
   }
 }
-export class UserEmail {
+export class UserEmailRepository {
   constructor(private prisma: PrismaClient) {}
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({
       where: {
-        email,
+        email
       },
     });
   }

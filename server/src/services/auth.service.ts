@@ -2,7 +2,7 @@ import prisma from "../prisma/client"
 import bcrypt from "bcrypt"
 import { AppError } from "../utils/AppError" 
 import { slugify } from "../utils/slugify"
-import { UserRepository, UserEmail } from "../repositories/user.repository"
+import { UserRepository, UserEmailRepository } from "../repositories/user.repository"
 import { RestaurantRepository } from "../repositories/restaurant.repository"
 import type { RegisterInput } from "../types/auth.types"
 
@@ -10,12 +10,12 @@ export class AuthService {
   constructor(
     private userRepository: UserRepository,
     private restaurantRepository: RestaurantRepository,
-    private userEmail: UserEmail
+    private userEmailRepository: UserEmailRepository
   ) {}
-  async register(data: RegisterInput) {
+  async register(data: RegisterInput) {    
     const { restaurantName, ownerName, email, password } = data
-
-    const existingUser = await this.userEmail.findByEmail(email)
+    
+    const existingUser = await this.userEmailRepository.findByEmail(data.email)
     if (existingUser) {
       throw new AppError("Email already exist", 409)
     }
