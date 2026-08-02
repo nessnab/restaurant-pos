@@ -4,3 +4,9 @@ export type RegisterInput = {
   email: string;
   password: string;
 };
+
+export type CashierRegisterInput = {
+  name: string;
+  email?: string;
+  password: string;
+}

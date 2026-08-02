@@ -1,7 +1,7 @@
 export interface CreateUserInput {
   restaurantId: string;
   name: string;
-  email: string;
+  email?: string;
   passwordHash: string;
   role: "OWNER" | "CASHIER";
 };
