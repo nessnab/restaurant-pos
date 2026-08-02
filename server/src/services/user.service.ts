@@ -12,7 +12,15 @@ export class UserService {
   ) {}
   
   async register(data: CashierRegisterInput, restaurantId: string) {
-    const { name, email, password } = data
+    const { name, username, email, password } = data
+
+    // check username
+    const usernameExists = await this.userEmailRepository.findByUsername(username, restaurantId)
+    if (usernameExists) {
+      throw new AppError("Username already exists", 409)
+    }
+    
+    // check email if existed
     if (email) {
       const existingUser = await this.userEmailRepository.findByEmail(email)
       if (existingUser) {
@@ -24,6 +32,7 @@ export class UserService {
     const cashier = await this.userRepository.createUser({
         restaurantId: restaurantId,
         name: name,
+        username: username,
         ...(email && { email }),
         passwordHash,
         role: "CASHIER"
@@ -34,6 +43,7 @@ export class UserService {
       id: cashier.id,
       restaurantId: cashier.restaurantId,
       name: cashier.name,
+      username: cashier.username,
       email: cashier.email,
       role: cashier.role,
       isActive: cashier.isActive,

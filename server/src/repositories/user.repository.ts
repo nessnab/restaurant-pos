@@ -18,4 +18,15 @@ export class UserEmailRepository {
       },
     });
   }
+  async findByUsername(username: string, restaurantId: string) {
+    return this.prisma.user.findUnique({
+      where: {
+        restaurantId_username: {
+          restaurantId,
+          username
+        }
+      },
+    });
+  }
 }
+

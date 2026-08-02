@@ -4,6 +4,7 @@ export interface CreateUserInput {
   email?: string;
   passwordHash: string;
   role: "OWNER" | "CASHIER";
+  username?: string;
 };
 
 export interface AuthUser {

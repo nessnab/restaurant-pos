@@ -7,6 +7,7 @@ export type RegisterInput = {
 
 export type CashierRegisterInput = {
   name: string;
+  username: string;
   email?: string;
   password: string;
 }

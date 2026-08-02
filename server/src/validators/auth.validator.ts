@@ -14,6 +14,7 @@ export const loginSchema = z.object({
 
 export const cashierRegisterSchema = z.object({
   name: z.string().min(1),
+  username: z.string().min(1).optional(),
   email: z.string().email().optional(),
   password: z.string().min(8),
 });
