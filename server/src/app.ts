@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 
 import indexRoutes from "./routes/index"
 import authRoutes from "./routes/auth.routes";
+import userRoutes from "./routes/user.routes";
 import { errorHandler } from "./middleware/errorHandler"
 
 const app = express()
@@ -23,7 +24,10 @@ app.get('/health', (req: Request, res: Response) => {
 });
 
 // Routes
-app.use("/", indexRoutes)
+app.use("/", 
+  indexRoutes, 
+  userRoutes,
+);
 app.use("/auth", authRoutes);
 
 // Error handling middleware
