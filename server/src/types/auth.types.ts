@@ -10,4 +10,5 @@ export type CashierRegisterInput = {
   username: string;
   email?: string;
   password: string;
+  restaurantSlug: string;
 }

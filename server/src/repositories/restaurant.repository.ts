@@ -11,4 +11,12 @@ export class RestaurantRepository {
       },
     });
   }
+
+  async findBySlug(slug: string) {
+    return this.prisma.restaurant.findUnique({
+      where: {
+        slug,
+      },
+    });
+  }
 }

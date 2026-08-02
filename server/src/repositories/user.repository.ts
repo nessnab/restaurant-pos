@@ -26,6 +26,9 @@ export class UserEmailRepository {
           username
         }
       },
+      include: {
+        restaurant: true
+      }
     });
   }
 }

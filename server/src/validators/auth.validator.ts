@@ -18,3 +18,9 @@ export const cashierRegisterSchema = z.object({
   email: z.string().email().optional(),
   password: z.string().min(8),
 });
+
+export const cashierLoginSchema = z.object({
+  restaurantSlug: z.string().min(1),
+  username: z.string().min(1),
+  password: z.string().min(8),
+});

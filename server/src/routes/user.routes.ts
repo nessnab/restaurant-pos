@@ -8,15 +8,18 @@ import { UserRepository, UserEmailRepository } from "../repositories/user.reposi
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 import { validate } from "../middleware/validate";
-import { cashierRegisterSchema } from "../validators/auth.validator";
+import { cashierRegisterSchema, cashierLoginSchema } from "../validators/auth.validator";
+import { RestaurantRepository } from "../repositories/restaurant.repository";
 
 const router = Router();
+const restaurantRepository = new RestaurantRepository(prisma);
 const userRepository = new UserRepository(prisma);
 const userEmailRepository = new UserEmailRepository(prisma);
 
 const userService = new UserService(
+  restaurantRepository,
   userRepository,
-  userEmailRepository
+  userEmailRepository,
 );
 const authMiddleware = new AuthMiddleware();
 const userController = new UserController(userService);
@@ -27,6 +30,12 @@ router.post(
   authorize("OWNER"),
   validate(cashierRegisterSchema),
   userController.registerCashier.bind(userController)
+);
+
+router.post(
+  "/users/login",
+  validate(cashierLoginSchema),
+  userController.loginCashier.bind(userController)
 );
 
 export default router;
