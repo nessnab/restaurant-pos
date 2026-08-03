@@ -73,7 +73,7 @@ model Category {
 model MenuItem {
   id            String    @id @default(uuid())
   restaurantId  String
-  categoryId    String
+  categoryId    String?
 
   name          String
   description   String?
@@ -88,7 +88,7 @@ model MenuItem {
   updatedAt     DateTime  @updatedAt
 
   restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
-  category      Category   @relation(fields: [categoryId], references: [id])
+  category      Category?   @relation(fields: [categoryId], references: [id])
   orderItems    OrderItem[]
 
   @@map("menu_items")
