@@ -1,0 +1,14 @@
+import { PrismaClient } from "@prisma/client"
+
+export class CategoryRepository {
+  constructor(private prisma: PrismaClient) {}
+
+  async createCategory(name: string, restaurantId: string) {
+    return this.prisma.category.create({
+      data: {
+        name,
+        restaurantId
+      },
+    })
+  }
+}
