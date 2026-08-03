@@ -31,5 +31,12 @@ export class UserRepository {
       }
     });
   }
+  async findByRestaurantId(restaurantId: string) {
+    return this.prisma.user.findMany({
+      where: {
+        restaurantId
+      },
+    });
+  }
 }
 

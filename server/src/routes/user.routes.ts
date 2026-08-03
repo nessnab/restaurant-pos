@@ -38,4 +38,11 @@ router.post(
   userController.loginCashier.bind(userController)
 );
 
+router.get(
+  "/users",
+  authMiddleware.authenticate.bind(authMiddleware),
+  authorize("OWNER"),
+  userController.getUsersByRestaurantId.bind(userController)
+);
+
 export default router;

@@ -13,6 +13,17 @@ export class UserService {
     private userRepository: UserRepository,
   ) {}
 
+  async getUsersByRestaurantId(restaurantId: string) {
+    const users = await this.userRepository.findByRestaurantId(restaurantId)
+    return users.map(user => ({
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      role: user.role,
+      isActive: user.isActive,
+    }))
+  }
+
   async loginCashier(
     restaurantSlug: string,
     username: string, 
@@ -63,7 +74,7 @@ export class UserService {
   
   async registerCashier(data: CashierRegisterInput, restaurantId: string) {
     const { name, username, email, password } = data
-    
+
     // check username
     const usernameExists = await this.userRepository.findByUsername(username, restaurantId)
     if (usernameExists) {
