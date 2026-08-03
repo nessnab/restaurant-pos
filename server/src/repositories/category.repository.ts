@@ -11,4 +11,12 @@ export class CategoryRepository {
       },
     })
   }
+
+  async findByRestaurantId(restaurantId: string) {
+    return this.prisma.category.findMany({
+      where: {
+        restaurantId,
+      },
+    })
+  }
 }

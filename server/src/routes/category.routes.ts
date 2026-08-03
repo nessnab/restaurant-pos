@@ -24,4 +24,10 @@ router.post(
   categoryController.createCategory.bind(categoryController)
 )
 
+router.get(
+  "/categories",
+  authMiddleware.authenticate.bind(authMiddleware),
+  categoryController.getCategoryByRestaurantId.bind(categoryController)
+)
+
 export default router
