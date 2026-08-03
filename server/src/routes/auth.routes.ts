@@ -5,7 +5,7 @@ import { AuthController } from "../controllers/auth.controller";
 import { AuthService } from "../services/auth.service";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 
-import { UserEmailRepository, UserRepository } from "../repositories/user.repository";
+import { UserRepository, UserOwnerRepository } from "../repositories/user.repository";
 import { RestaurantRepository } from "../repositories/restaurant.repository";
 
 import { validate } from "../middleware/validate";
@@ -13,14 +13,14 @@ import { registerSchema, loginSchema } from "../validators/auth.validator";
 
 const router = Router();
 
-const userRepository = new UserRepository(prisma);
+const userOwnerRepository = new UserOwnerRepository(prisma);
 const restaurantRepository = new RestaurantRepository(prisma);
-const userEmailRepository = new UserEmailRepository(prisma);
+const userRepository = new UserRepository(prisma);
 
 const authService = new AuthService(
-  userRepository, 
+  userOwnerRepository, 
   restaurantRepository,
-  userEmailRepository
+  userRepository
 );
 
 const authController = new AuthController(authService);

@@ -4,18 +4,18 @@ import jwt from "jsonwebtoken"
 import { AppError } from "../utils/AppError" 
 import { slugify } from "../utils/slugify"
 
-import { UserRepository, UserEmailRepository } from "../repositories/user.repository"
+import { UserRepository, UserOwnerRepository } from "../repositories/user.repository"
 import { RestaurantRepository } from "../repositories/restaurant.repository"
 import type { RegisterInput } from "../types/auth.types"
 
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    private userOwnerRepository: UserOwnerRepository,
     private restaurantRepository: RestaurantRepository,
-    private userEmailRepository: UserEmailRepository
+    private userRepository: UserRepository,
   ) {}
   async login(email: string, password: string) {
-    const user = await this.userEmailRepository.findByEmail(email)
+    const user = await this.userRepository.findByEmail(email)
     if (!user || !user.isActive) {
       throw new AppError("Invalid email or password", 401)
     }
@@ -50,7 +50,7 @@ export class AuthService {
   async register(data: RegisterInput) {    
     const { restaurantName, ownerName, email, password } = data
     
-    const existingUser = await this.userEmailRepository.findByEmail(data.email)
+    const existingUser = await this.userRepository.findByEmail(data.email)
     if (existingUser) {
       throw new AppError("Email already exist", 409)
     }
@@ -61,14 +61,14 @@ export class AuthService {
 
     const result = await prisma.$transaction(async (tx) => {
       const restaurantRepository = new RestaurantRepository(tx)
-      const userRepository = new UserRepository(tx)
+      const userOwnerRepository = new UserOwnerRepository(tx)
 
       const restaurant = await restaurantRepository.createRestaurant(
         restaurantName,
         slug,
       )
 
-      const user = await userRepository.createUser({
+      const user = await userOwnerRepository.createUser({
         restaurantId: restaurant.id,
         name: ownerName,
         email,

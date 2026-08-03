@@ -2,15 +2,15 @@ import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 import { AppError } from "../utils/AppError" 
 
-import { UserRepository, UserEmailRepository } from "../repositories/user.repository"
+import { UserRepository, UserOwnerRepository } from "../repositories/user.repository"
 import type { RestaurantRepository } from "../repositories/restaurant.repository"
 import type { CashierRegisterInput } from "../types/auth.types"
 
 export class UserService {
   constructor(
     private restaurantRepository: RestaurantRepository,
+    private userOwnerRepository: UserOwnerRepository,
     private userRepository: UserRepository,
-    private userEmailRepository: UserEmailRepository
   ) {}
 
   async loginCashier(
@@ -26,15 +26,15 @@ export class UserService {
     }
 
     // check if user exists
-    const user = await this.userEmailRepository.findByUsername(username, restaurant.id,)
+    const user = await this.userRepository.findByUsername(username, restaurant.id)
     if (!user || !user.isActive) {
-      throw new AppError("Invalid usn", 401)
+      throw new AppError("Invalid username", 401)
     }
 
     // check if password is correct
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash)
     if (!isPasswordValid) {
-      throw new AppError("Invalid pasw", 401)
+      throw new AppError("Invalid password", 401)
     }
 
     const token = jwt.sign(
@@ -63,29 +63,23 @@ export class UserService {
   
   async registerCashier(data: CashierRegisterInput, restaurantId: string) {
     const { name, username, email, password } = data
-
-    // check if restaurant exists
-    const restaurant = await this.restaurantRepository.findBySlug(restaurantId)
-    if (!restaurant) {
-      throw new AppError("Invalid restaurant", 401)
-    }
-
+    
     // check username
-    const usernameExists = await this.userEmailRepository.findByUsername(username, restaurantId)
+    const usernameExists = await this.userRepository.findByUsername(username, restaurantId)
     if (usernameExists) {
       throw new AppError("Username already exists", 409)
     }
     
     // check email if existed
     if (email) {
-      const existingUser = await this.userEmailRepository.findByEmail(email)
+      const existingUser = await this.userRepository.findByEmail(email)
       if (existingUser) {
         throw new AppError("Email already exists", 409)
       } 
     }
     const passwordHash = await bcrypt.hash(password, 10)
 
-    const cashier = await this.userRepository.createUser({
+    const cashier = await this.userOwnerRepository.createUser({
         restaurantId: restaurantId,
         name: name,
         username: username,

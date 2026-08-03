@@ -3,7 +3,7 @@ import { Router } from "express";
 import { UserController } from "../controllers/user.controller";
 import { UserService } from "../services/user.service";
 
-import { UserRepository, UserEmailRepository } from "../repositories/user.repository";
+import { UserOwnerRepository, UserRepository } from "../repositories/user.repository";
 
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
@@ -13,13 +13,13 @@ import { RestaurantRepository } from "../repositories/restaurant.repository";
 
 const router = Router();
 const restaurantRepository = new RestaurantRepository(prisma);
+const userOwnerRepository = new UserOwnerRepository(prisma);
 const userRepository = new UserRepository(prisma);
-const userEmailRepository = new UserEmailRepository(prisma);
 
 const userService = new UserService(
   restaurantRepository,
+  userOwnerRepository,
   userRepository,
-  userEmailRepository,
 );
 const authMiddleware = new AuthMiddleware();
 const userController = new UserController(userService);

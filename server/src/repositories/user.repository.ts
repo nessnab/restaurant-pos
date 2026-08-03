@@ -1,7 +1,7 @@
 import type { Prisma, PrismaClient } from "@prisma/client";
 import type { CreateUserInput } from "../types/user.types";
 
-export class UserRepository {
+export class UserOwnerRepository {
   constructor(private prisma: Prisma.TransactionClient) {}
   async createUser(data: CreateUserInput) {
     return this.prisma.user.create({
@@ -9,7 +9,7 @@ export class UserRepository {
     });
   }
 }
-export class UserEmailRepository {
+export class UserRepository {
   constructor(private prisma: PrismaClient) {}
   async findByEmail(email: string) {
     return this.prisma.user.findUnique({
