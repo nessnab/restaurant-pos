@@ -8,6 +8,7 @@ import indexRoutes from "./routes/index"
 import authRoutes from "./routes/auth.routes";
 import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes"
+import menuRoutes from "./routes/menu.routes"
 import { errorHandler } from "./middleware/errorHandler"
 
 const app = express()
@@ -29,6 +30,7 @@ app.use("/",
   indexRoutes, 
   userRoutes,
   categoryRoutes,
+  menuRoutes,
 );
 
 app.use("/auth", authRoutes);

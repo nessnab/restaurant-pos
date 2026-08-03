@@ -19,4 +19,13 @@ export class CategoryRepository {
       },
     })
   }
+
+  async findById(id: string, restaurantId: string) {
+    return this.prisma.category.findFirst({
+      where: {
+        id,
+        restaurantId,
+      },
+    })
+  }
 }
