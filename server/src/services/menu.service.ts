@@ -9,6 +9,13 @@ export class MenuService {
     private categoryRepository: CategoryRepository
   ) {}
 
+  async getMenu(data: CreateMenuInput, restaurantId: string) {
+    const menu = await this.menuRepository.findByRestaurantId(restaurantId)
+    return menu.map(() => ({
+      data
+    }))
+  }
+
   async createMenuItem(data: CreateMenuInput, restaurantId: string) {
     const { name, description, price, categoryId } = data
 

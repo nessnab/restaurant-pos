@@ -8,4 +8,12 @@ export class MenuRepository {
       data,
     })
   }
+
+  async findByRestaurantId(restaurantId: string) {
+    return this.prisma.menuItem.findMany({
+      where: {
+        restaurantId
+      },
+    })
+  }
 }

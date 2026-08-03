@@ -26,4 +26,10 @@ router.post(
   menuController.createMenuItem.bind(menuController)
 )
 
+router.get(
+  "/menu",
+  authMiddleware.authenticate.bind(authMiddleware),
+  menuController.getMenuByRestaurantId.bind(menuController)
+)
+
 export default router
