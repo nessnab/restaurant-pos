@@ -28,4 +28,17 @@ export class MenuRepository {
       }
     })
   }
+
+  async findByIds(ids: string[], restaurantId: string) {
+    return this.prisma.menuItem.findMany({
+      where: {
+        id: {
+          in: ids,
+        },
+        restaurantId,
+        isActive: true,
+        isAvailable: true,
+      },
+    })
+  }
 }
