@@ -16,4 +16,16 @@ export class MenuRepository {
       },
     })
   }
+
+  async findById(id: string, restaurantId: string) {
+    return this.prisma.menuItem.findFirst({
+      where: {
+        id,
+        restaurantId
+      },
+      include: {
+        category: true
+      }
+    })
+  }
 }

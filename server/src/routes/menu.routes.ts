@@ -32,4 +32,10 @@ router.get(
   menuController.getMenuByRestaurantId.bind(menuController)
 )
 
+router.get(
+  "/menu/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  menuController.getMenuItem.bind(menuController)
+)
+
 export default router

@@ -9,7 +9,33 @@ export class MenuService {
     private categoryRepository: CategoryRepository
   ) {}
 
-  async getMenu(data: CreateMenuInput, restaurantId: string) {
+  async getMenuItem(id: string, restaurantId: string) {
+    const menu = await this.menuRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!menu) {
+      throw new AppError("Menu does not exist", 404)
+    }
+
+    return {
+      id: menu.id,
+      name: menu.name,
+      description: menu.description,
+      price: menu.price,
+      isAvailable: menu.isAvailable,
+      isActive: menu.isActive,
+      displayOrder: menu.displayOrder,
+      category: menu.category
+        ? {
+            id: menu.category.id,
+            name: menu.category.name,
+          }
+        : null,
+    }
+  }
+
+  async getAllMenu(data: CreateMenuInput, restaurantId: string) {
     const menu = await this.menuRepository.findByRestaurantId(restaurantId)
     return menu.map(() => ({
       data
