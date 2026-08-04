@@ -104,7 +104,8 @@ model Order {
   restaurantId    String
   cashierId       String
 
-  orderNumber     String        @unique
+  orderNumber     Int        
+  orderDate       DateTime      @db.Date
 
   paymentMethod   PaymentMethod?
 
@@ -123,7 +124,7 @@ model Order {
   orderItems      OrderItem[]
 
   @@map("orders")
-  @@unique([restaurantId, orderNumber])
+  @@unique([restaurantId, orderDate, orderNumber])
 }
 
 model OrderItem {
