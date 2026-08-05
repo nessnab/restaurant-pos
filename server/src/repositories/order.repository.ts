@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client"
 
+
 export class OrderRepository {
   constructor(private prisma: Prisma.TransactionClient) {}
 

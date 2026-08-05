@@ -1,8 +1,9 @@
+import prisma from "../prisma/client";
 import { OrderRepository } from "../repositories/order.repository";
 import { MenuRepository } from "../repositories/menu.repository";
 import type { CreateOrderInput } from "../types/order.types";
 import { AppError } from "../utils/AppError";
-import prisma from "../prisma/client";
+import { getRestaurantDate } from "../utils/date"
 
 export class OrderService {
   constructor(
@@ -14,12 +15,8 @@ export class OrderService {
     restaurantId: string, 
     cashierId: string
   ) {
-    const { items } = data
+    const { items, paymentMethod, cashReceived } = data
 
-    // check order input exist
-    if (items.length === 0) {
-      throw new AppError("Order must contain at least one item", 400)
-    }
     // get all menu id from input
     const menuItemsIds = items.map(
       item => item.menuItemId
@@ -57,8 +54,24 @@ export class OrderService {
       (total, item) => total + item.subtotal,
       0
     )
+    // check payment method
+    if (paymentMethod === "CASH") {
+      if (cashReceived === undefined) {
+        throw new AppError(
+          "Cash received is required for cash payment",
+          400
+        )
+      }
+
+      if (cashReceived < totalAmount) {
+        throw new AppError(
+          "Cash received is less than the total amount",
+          400
+        )
+      }
+    }
     // take new date
-    const orderDate = new Date()
+    const orderDate = getRestaurantDate()
     // find latest order from repo to make order number
     const latestOrder = await this.orderRepository.findLatestOrder(
       restaurantId,
@@ -97,6 +110,9 @@ export class OrderService {
             subtotal: item.subtotal,
           })),
         },
+        paymentMethod,
+        cashReceived: cashReceived ?? null,
+        paidAt: new Date()
       })
     })
 
