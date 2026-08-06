@@ -1,6 +1,6 @@
 import { MenuRepository } from "../repositories/menu.repository";
 import { CategoryRepository } from "../repositories/category.repository";
-import type { CreateMenuInput } from "../types/menu.types";
+import type { CreateMenuInput, UpdateMenuInput } from "../types/menu.types";
 import { AppError } from "../utils/AppError";
 
 export class MenuService {
@@ -8,6 +8,37 @@ export class MenuService {
     private menuRepository: MenuRepository,
     private categoryRepository: CategoryRepository
   ) {}
+
+  async updateMenu(
+    id: string, 
+    data: UpdateMenuInput,
+    restaurantId: string,
+  ) {
+    const menu = await this.menuRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!menu) {
+      throw new AppError("Menu not found", 404)
+    }
+
+    if (data.categoryId) {
+      const category = await this.categoryRepository.findById(
+        data.categoryId,
+        restaurantId
+      )
+
+      if (!category) {
+        throw new AppError("Category not found", 404)
+      }
+    }
+    
+    return await this.menuRepository.updateMenu(
+      id,
+      restaurantId,
+      data,
+    )
+  }
 
   async getMenuItem(id: string, restaurantId: string) {
     const menu = await this.menuRepository.findById(
@@ -35,11 +66,9 @@ export class MenuService {
     }
   }
 
-  async getAllMenu(data: CreateMenuInput, restaurantId: string) {
+  async getAllMenu(restaurantId: string) {
     const menu = await this.menuRepository.findByRestaurantId(restaurantId)
-    return menu.map(() => ({
-      data
-    }))
+    return menu
   }
 
   async createMenuItem(data: CreateMenuInput, restaurantId: string) {

@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from "@prisma/client"
+import type { UpdateMenuInput } from "../types/menu.types"
 
 export class MenuRepository {
   constructor(private prisma: PrismaClient) {}
@@ -12,7 +13,8 @@ export class MenuRepository {
   async findByRestaurantId(restaurantId: string) {
     return this.prisma.menuItem.findMany({
       where: {
-        restaurantId
+        restaurantId,
+        isActive: true,
       },
     })
   }
@@ -40,5 +42,47 @@ export class MenuRepository {
         isAvailable: true,
       },
     })
+  }
+
+  async updateMenu(
+    id: string, 
+    restaurantId: string,
+    data: UpdateMenuInput,
+  ) {
+      return this.prisma.menuItem.update({
+        where: {
+          id,
+        },
+        data: {
+          ...(data.name !== undefined && {
+            name: data.name,
+          }),
+          
+          ...(data.description !== undefined && {
+            description: data.description,
+          }),
+
+          ...(data.price !== undefined && {
+            price: data.price,
+          }),
+
+          ...(data.isAvailable !== undefined && {
+            isAvailable: data.isAvailable,
+          }),
+
+          ...(data.categoryId !== undefined && {
+            category:
+              data.categoryId === null
+                ? {
+                    disconnect: true,
+                  }
+                : {
+                    connect: {
+                      id: data.categoryId,
+                    },
+                  },
+          }),
+        }
+      })
   }
 }

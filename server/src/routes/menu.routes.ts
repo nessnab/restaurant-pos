@@ -38,4 +38,10 @@ router.get(
   menuController.getMenuItem.bind(menuController)
 )
 
+router.patch(
+  "/menu/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  menuController.updateMenu.bind(menuController)
+)
+
 export default router

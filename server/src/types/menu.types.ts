@@ -4,3 +4,11 @@ export interface CreateMenuInput{
   price: number;
   categoryId?: string;
 }
+
+export interface UpdateMenuInput {
+  name?: string
+  description?: string
+  price?: number
+  categoryId?: string | null
+  isAvailable?: boolean
+}
