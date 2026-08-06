@@ -8,7 +8,22 @@ import { getRestaurantDate } from "../utils/date"
 export class OrderService {
   constructor(
     private orderRepository: OrderRepository, 
-    private menuRepository: MenuRepository) {}
+    private menuRepository: MenuRepository,
+  ) {}
+  
+  async getOrders(
+    restaurantId: string,
+    page: number,
+    limit: number,
+  ) {
+    const skip = (page - 1) * limit
+    const orders = await this.orderRepository.findAllByRestaurantId(
+      restaurantId,
+      skip,
+      limit,
+    )
+    return orders
+  }
 
   async createOrder(
     data: CreateOrderInput,

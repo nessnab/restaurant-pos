@@ -28,4 +28,38 @@ export class OrderRepository {
     })
   }
 
+  async findAllByRestaurantId(
+    restaurantId: string,
+    skip: number,
+    limit: number,
+  ) {
+    return this.prisma.order.findMany({
+      where: {
+        restaurantId,
+      },
+      include: {
+        orderItems: {
+          select: {
+            menuName: true,
+            quantity: true,
+            unitPrice: true,
+            subtotal: true,
+          },
+        },
+        cashier: {
+          select: {
+            id: true,
+            name: true,
+          }
+        }
+      },
+      orderBy: [
+        { orderDate: "desc" },
+        { orderNumber: "desc" },
+      ],
+      skip,
+      take: limit
+    })
+  }
+
 }

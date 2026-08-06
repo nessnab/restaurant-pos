@@ -19,9 +19,14 @@ const orderController = new OrderController(orderService)
 
 router.post(
   "/order",
-  authMiddleware.authenticate.bind(authMiddleware),
   validate(createOrderSchema),
   orderController.createOrder.bind(orderController),
+)
+
+router.get(
+  "/orders",
+  authMiddleware.authenticate.bind(authMiddleware),
+  orderController.getAllOrderByRestaurantId.bind(orderController)
 )
 
 export default router
