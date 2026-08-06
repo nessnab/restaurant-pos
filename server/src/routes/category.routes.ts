@@ -30,4 +30,10 @@ router.get(
   categoryController.getCategoryByRestaurantId.bind(categoryController)
 )
 
+router.patch(
+  "/category/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  categoryController.updateCategory.bind(categoryController)
+)
+
 export default router

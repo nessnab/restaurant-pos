@@ -12,3 +12,7 @@ export interface UpdateMenuInput {
   categoryId?: string | null
   isAvailable?: boolean
 }
+
+export interface UpdateCategoryInput {
+  name?: string
+}

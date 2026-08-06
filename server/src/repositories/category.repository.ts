@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client"
+import type { UpdateCategoryInput } from "../types/menu.types"
 
 export class CategoryRepository {
   constructor(private prisma: PrismaClient) {}
@@ -28,4 +29,21 @@ export class CategoryRepository {
       },
     })
   }
+
+  async updateCategory(
+    id: string,
+    data: UpdateCategoryInput,
+  ) {
+    return this.prisma.category.update({
+      where: {
+        id,
+      }, 
+      data: {
+        ...(data.name !== undefined && {
+          name: data.name,
+        }),
+      }
+    })
+  }
+
 }
