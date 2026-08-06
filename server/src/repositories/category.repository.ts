@@ -46,4 +46,17 @@ export class CategoryRepository {
     })
   }
 
+  async deleteCategory(
+    id: string,
+  ) {
+    return this.prisma.category.update({
+      where: {
+        id,
+      }, 
+      data: {
+        isActive: false
+      }
+    })
+  }
+
 }

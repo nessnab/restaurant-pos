@@ -36,4 +36,10 @@ router.patch(
   categoryController.updateCategory.bind(categoryController)
 )
 
+router.delete(
+  "/category/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  categoryController.deleteCategory.bind(categoryController)
+)
+
 export default router

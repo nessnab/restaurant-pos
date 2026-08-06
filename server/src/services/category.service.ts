@@ -5,6 +5,23 @@ import type { UpdateCategoryInput } from "../types/menu.types";
 export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {} 
 
+  async deleteCategory(
+    id: string, 
+    restaurantId: string,
+  ) {
+    const category = await this.categoryRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!category) {
+      throw new AppError("Category not found", 404)
+    }
+    
+    return await this.categoryRepository.deleteCategory(
+      id,
+    )
+  }
+
   async updateCategory(
       id: string, 
       restaurantId: string,
