@@ -29,4 +29,10 @@ router.get(
   orderController.getAllOrderByRestaurantId.bind(orderController)
 )
 
+router.get(
+  "/order/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  orderController.getOrderById.bind(orderController)
+)
+
 export default router

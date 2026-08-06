@@ -35,7 +35,7 @@ export class OrderRepository {
   ) {
     return this.prisma.order.findMany({
       where: {
-        restaurantId,
+        restaurantId
       },
       include: {
         orderItems: {
@@ -61,5 +61,41 @@ export class OrderRepository {
       take: limit
     })
   }
+
+  async findOrderById(id: string, restaurantId: string) {
+    console.log("Order ID:", id)
+console.log("Restaurant ID:", restaurantId)
+    return this.prisma.order.findUnique({
+      where: {
+        id,
+        restaurantId
+      },
+      include: {
+        orderItems: {
+          select: {
+            menuName: true,
+            unitPrice: true,
+            quantity: true,
+            subtotal: true,
+          }
+        },
+        cashier: {
+          select: {
+            id: true,
+            name: true
+          }
+        },
+        restaurant: {
+          select: {
+            name: true,
+            address: true,
+            phone: true,
+          }
+        }
+      }
+    })
+  }
+
+  // next: this.prisma.order.count()
 
 }

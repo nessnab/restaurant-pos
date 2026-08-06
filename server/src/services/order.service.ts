@@ -10,6 +10,31 @@ export class OrderService {
     private orderRepository: OrderRepository, 
     private menuRepository: MenuRepository,
   ) {}
+
+  async getOrderId(
+    id: string,
+    restaurantId: string
+  ) {
+    const order = await this.orderRepository.findOrderById(
+      id,
+      restaurantId
+    )
+    if (!order) {
+      throw new AppError("Order not found", 404)
+    }
+    // return order
+    return {
+      id: order.id,
+      orderNumber: order.orderNumber,
+      totalAmount: order.totalAmount,
+      paymentMethod: order.paymentMethod,
+      paidAt: order.paidAt,
+      createdAt: order.createdAt,
+      restaurant: order.restaurant,
+      cashier: order.cashier,
+      orderItems: order.orderItems
+    }
+  }
   
   async getOrders(
     restaurantId: string,

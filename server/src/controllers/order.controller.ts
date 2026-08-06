@@ -2,8 +2,28 @@ import type { Request, Response, NextFunction } from "express";
 import { AppError } from "../utils/AppError";
 import { OrderService } from "../services/order.service";
 
+type GetOrderParams = {
+  id: string
+}
 export class OrderController{
   constructor(private orderService: OrderService) {}
+
+  async getOrderById(
+    req: Request<GetOrderParams>, res: Response, next: NextFunction
+  ) {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthenticated", 401)
+      }
+      const result = await this.orderService.getOrderId(
+        req.params.id,
+        req.user.restaurantId
+      )
+      res.status(200).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
 
   async getAllOrderByRestaurantId(
     req: Request, res: Response, next: NextFunction
