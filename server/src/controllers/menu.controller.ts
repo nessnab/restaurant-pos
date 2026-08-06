@@ -5,6 +5,23 @@ import { MenuService } from "../services/menu.service";
 export class MenuController {
   constructor(private menuService: MenuService) {} 
 
+  async deleteMenu(
+    req: Request<{ id: string }>, res: Response, next: NextFunction
+  ) {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthenticated", 401)
+      }
+      const result = await this.menuService.deleteMenu(
+        req.params.id,
+        req.user.restaurantId
+      )
+      res.status(200).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async updateMenu(
     req: Request<{ id: string}>, res: Response, next: NextFunction
   ) {

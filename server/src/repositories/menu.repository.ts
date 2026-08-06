@@ -52,6 +52,7 @@ export class MenuRepository {
       return this.prisma.menuItem.update({
         where: {
           id,
+          restaurantId,
         },
         data: {
           ...(data.name !== undefined && {
@@ -85,4 +86,19 @@ export class MenuRepository {
         }
       })
   }
+
+    async deleteMenu(
+      id: string,
+    ) {
+      return this.prisma.menuItem.update({
+        where: {
+          id,
+          // restaurantId
+        },
+        data: {
+          isActive: false
+        }
+      }
+      )
+    }
 }

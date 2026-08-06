@@ -9,6 +9,22 @@ export class MenuService {
     private categoryRepository: CategoryRepository
   ) {}
 
+  async deleteMenu(
+    id: string,
+    restaurantId: string,
+  ) {
+    const menu = await this.menuRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!menu) {
+      throw new AppError("Menu not found", 404)
+    }
+    return await this.menuRepository.deleteMenu(
+      id,
+    )
+  }
+
   async updateMenu(
     id: string, 
     data: UpdateMenuInput,

@@ -44,4 +44,10 @@ router.patch(
   menuController.updateMenu.bind(menuController)
 )
 
+router.delete(
+  "/menu/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  menuController.deleteMenu.bind(menuController)
+)
+
 export default router
