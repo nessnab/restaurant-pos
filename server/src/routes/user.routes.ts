@@ -64,4 +64,11 @@ router.patch(
   userController.updateUser.bind(userController)
 );
 
+router.delete(
+  "/user/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  authorize("OWNER"),
+  userController.deleteUser.bind(userController)
+);
+
 export default router;

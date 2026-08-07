@@ -34,7 +34,8 @@ export class UserRepository {
   async findByRestaurantId(restaurantId: string) {
     return this.prisma.user.findMany({
       where: {
-        restaurantId
+        restaurantId,
+        isActive: true,
       },
     });
   }
@@ -71,6 +72,19 @@ export class UserRepository {
         ...(data.username !== undefined && {
             username: data.username,
           }),
+      }
+    })
+  }
+
+  async deleteUser(
+    id: string,
+  ) {
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        isActive: false
       }
     })
   }

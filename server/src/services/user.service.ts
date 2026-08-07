@@ -14,6 +14,22 @@ export class UserService {
     private userRepository: UserRepository,
   ) {}
 
+  async deleteUser(
+    id: string,
+    restaurantId: string
+  ) {
+    const user = await this.userRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!user) {
+      throw new AppError("User not found", 404)
+    }
+    return await this.userRepository.deleteUser(
+      id
+    )
+  }
+
   async updateUser(
     id: string, 
     restaurantId: string,
