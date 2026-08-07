@@ -5,6 +5,22 @@ import { AppError } from "../utils/AppError"
 export class UserController {
   constructor(private userService: UserService){}
 
+  async getUserById(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ) {
+    try {
+      if (!req.user) {
+        throw new AppError("Unauthenticated", 401)
+      }
+      const result = await this.userService.getUserById(req.user.id)
+      res.status(200).json(result)
+    } catch (error) {
+      next(error)
+    }
+  }
+
   async getUsersByRestaurantId(req: Request, res: Response, next: NextFunction) {
     try {
       if (!req.user) {

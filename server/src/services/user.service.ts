@@ -5,6 +5,7 @@ import { AppError } from "../utils/AppError"
 import { UserRepository, UserOwnerRepository } from "../repositories/user.repository"
 import type { RestaurantRepository } from "../repositories/restaurant.repository"
 import type { CashierRegisterInput } from "../types/auth.types"
+import type { CreateUserInput } from "../types/user.types"
 
 export class UserService {
   constructor(
@@ -12,6 +13,17 @@ export class UserService {
     private userOwnerRepository: UserOwnerRepository,
     private userRepository: UserRepository,
   ) {}
+
+  // async updateUser(id: string, data: CreateUserInput) {
+  //   const user = await
+  // }
+
+  async getUserById(
+    id: string,
+  ) {
+    const user = await this.userRepository.findById(id)
+    return user
+  }
 
   async getUsersByRestaurantId(restaurantId: string) {
     const users = await this.userRepository.findByRestaurantId(restaurantId)

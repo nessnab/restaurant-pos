@@ -45,4 +45,13 @@ router.get(
   userController.getUsersByRestaurantId.bind(userController)
 );
 
+router.get(
+  "/user/:id",
+  authMiddleware.authenticate.bind(authMiddleware),
+  authorize("OWNER"),
+  userController.getUserById.bind(userController)
+);
+
+
+
 export default router;

@@ -38,5 +38,38 @@ export class UserRepository {
       },
     });
   }
+
+  async findById(
+    id: string, 
+    // restaurantId: string
+  ) {
+    return this.prisma.user.findUnique({
+      where: {
+        id,
+        // restaurantId,
+      }, 
+    })
+  }
+
+  // async updateUser(id: string, data: CreateUserInput) {
+  //   return this.prisma.user.update({
+  //     where: {
+  //       id,
+  //     },
+  //     data: {
+  //       ...(data.name !== undefined && {
+  //           name: data.name,
+  //         }),
+
+  //       ...(data.email !== undefined && {
+  //           email: data.email,
+  //         }),
+        
+  //       ...(data.username !== undefined && {
+  //           username: data.username,
+  //         }),
+  //     }
+  //   })
+  // }
 }
 
