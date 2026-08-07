@@ -9,7 +9,7 @@ import { MenuController } from "../controllers/menu.controller"
 import { AuthMiddleware } from "../middleware/auth.middleware"
 import { authorize } from "../middleware/authorize.middleware"
 import { validate } from "../middleware/validate"
-import { menuSchema } from "../validators/menu.validator"
+import { createMenuSchema, updateMenuSchema } from "../validators/menu.validator"
 
 const router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -21,7 +21,7 @@ const menuController = new MenuController(menuService)
 router.post(
   "/menu",
   authMiddleware.authenticate.bind(authMiddleware),
-  validate(menuSchema),
+  validate(createMenuSchema),
   authorize("OWNER"),
   menuController.createMenuItem.bind(menuController)
 )
@@ -40,6 +40,7 @@ router.get(
 
 router.patch(
   "/menu/:id",
+  validate(updateMenuSchema),
   authMiddleware.authenticate.bind(authMiddleware),
   menuController.updateMenu.bind(menuController)
 )

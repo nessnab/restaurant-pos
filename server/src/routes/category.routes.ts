@@ -8,7 +8,7 @@ import { CategoryService } from "../services/category.service";
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 import { validate } from "../middleware/validate";
-import { categorySchema } from "../validators/category.validator";
+import { createCategorySchema, updateCategorySchema } from "../validators/category.validator";
 
 const router = Router()
 const authMiddleware = new AuthMiddleware()
@@ -19,7 +19,7 @@ const categoryController = new CategoryController(categoryService)
 router.post(
   "/category",
   authMiddleware.authenticate.bind(authMiddleware),
-  validate(categorySchema),
+  validate(createCategorySchema),
   authorize("OWNER"),
   categoryController.createCategory.bind(categoryController)
 )
@@ -32,6 +32,7 @@ router.get(
 
 router.patch(
   "/category/:id",
+  validate(updateCategorySchema),
   authMiddleware.authenticate.bind(authMiddleware),
   categoryController.updateCategory.bind(categoryController)
 )

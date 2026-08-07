@@ -9,10 +9,12 @@ import { AuthMiddleware } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 import { validate } from "../middleware/validate";
 import { 
-  cashierRegisterSchema, 
   cashierLoginSchema,
-  updateUserSchema
 } from "../validators/auth.validator";
+import { 
+  createCashierSchema, 
+  updateUserSchema 
+} from "../validators/user.validator";
 import { RestaurantRepository } from "../repositories/restaurant.repository";
 
 const router = Router();
@@ -32,7 +34,7 @@ router.post(
   "/users",
   authMiddleware.authenticate.bind(authMiddleware),
   authorize("OWNER"),
-  validate(cashierRegisterSchema),
+  validate(createCashierSchema),
   userController.registerCashier.bind(userController)
 );
 
