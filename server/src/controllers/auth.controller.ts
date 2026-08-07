@@ -1,8 +1,20 @@
 import type { Request, Response, NextFunction } from "express"
 import type { AuthService } from "../services/auth.service"
+import { AppError } from "../utils/AppError";
 
 export class AuthController {
   constructor(private authService: AuthService){}
+
+  // restaurant me
+  async restaurant(req: Request, res: Response) {
+    if (!req.user) {
+      throw new AppError("Unauthenticated", 401)
+    }
+    const result = await this.authService.restaurant(
+      req.user.restaurantId,
+    )
+    res.status(200).json(result);
+  }
   
   async me(req: Request, res: Response) {
     res.status(200).json(req.user);

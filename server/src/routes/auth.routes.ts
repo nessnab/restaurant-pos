@@ -44,4 +44,10 @@ router.get(
   authController.me.bind(authController)
 );
 
+router.get(
+  "/restaurant",
+  authMiddleware.authenticate.bind(authMiddleware),
+  authController.restaurant.bind(authController)
+);
+
 export default router;

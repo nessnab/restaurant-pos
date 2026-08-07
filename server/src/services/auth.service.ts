@@ -14,6 +14,17 @@ export class AuthService {
     private restaurantRepository: RestaurantRepository,
     private userRepository: UserRepository,
   ) {}
+
+  // restaurant me
+  async restaurant(restaurantId: string) {
+    const restaurant = await this.restaurantRepository.findById(
+      restaurantId,
+    )
+    if (!restaurant) {
+      throw new AppError("Restaurant not found", 404)
+    }
+    return restaurant
+  }
   async login(email: string, password: string) {
     const user = await this.userRepository.findByEmail(email)
     if (!user || !user.isActive) {

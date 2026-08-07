@@ -19,4 +19,12 @@ export class RestaurantRepository {
       },
     });
   }
+
+  async findById(restaurantId: string) {
+    return this.prisma.restaurant.findFirst({
+      where: {
+        id: restaurantId
+      }
+    })
+  }
 }
