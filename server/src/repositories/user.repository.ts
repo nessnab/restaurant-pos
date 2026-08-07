@@ -51,25 +51,28 @@ export class UserRepository {
     })
   }
 
-  // async updateUser(id: string, data: CreateUserInput) {
-  //   return this.prisma.user.update({
-  //     where: {
-  //       id,
-  //     },
-  //     data: {
-  //       ...(data.name !== undefined && {
-  //           name: data.name,
-  //         }),
+  async updateUser(
+    id: string,
+    restaurantId: string,
+    data: CreateUserInput) {
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...(data.name !== undefined && {
+            name: data.name,
+          }),
 
-  //       ...(data.email !== undefined && {
-  //           email: data.email,
-  //         }),
+        ...(data.email !== undefined && {
+            email: data.email,
+          }),
         
-  //       ...(data.username !== undefined && {
-  //           username: data.username,
-  //         }),
-  //     }
-  //   })
-  // }
+        ...(data.username !== undefined && {
+            username: data.username,
+          }),
+      }
+    })
+  }
 }
 

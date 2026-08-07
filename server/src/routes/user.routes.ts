@@ -8,7 +8,11 @@ import { UserOwnerRepository, UserRepository } from "../repositories/user.reposi
 import { AuthMiddleware } from "../middleware/auth.middleware";
 import { authorize } from "../middleware/authorize.middleware";
 import { validate } from "../middleware/validate";
-import { cashierRegisterSchema, cashierLoginSchema } from "../validators/auth.validator";
+import { 
+  cashierRegisterSchema, 
+  cashierLoginSchema,
+  updateUserSchema
+} from "../validators/auth.validator";
 import { RestaurantRepository } from "../repositories/restaurant.repository";
 
 const router = Router();
@@ -52,6 +56,12 @@ router.get(
   userController.getUserById.bind(userController)
 );
 
-
+router.patch(
+  "/user/:id",
+  validate(updateUserSchema),
+  authMiddleware.authenticate.bind(authMiddleware),
+  authorize("OWNER"),
+  userController.updateUser.bind(userController)
+);
 
 export default router;

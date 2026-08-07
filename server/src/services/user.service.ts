@@ -14,9 +14,23 @@ export class UserService {
     private userRepository: UserRepository,
   ) {}
 
-  // async updateUser(id: string, data: CreateUserInput) {
-  //   const user = await
-  // }
+  async updateUser(
+    id: string, 
+    restaurantId: string,
+    data: CreateUserInput) {
+    const user = await this.userRepository.findById(
+      id,
+      restaurantId
+    )
+    if (!user) {
+      throw new AppError("User not found", 404)
+    }
+    return await this.userRepository.updateUser(
+      id,
+      restaurantId,
+      data,
+    )
+  }
 
   async getUserById(
     id: string,
