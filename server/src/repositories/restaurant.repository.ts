@@ -1,4 +1,5 @@
 import type { Prisma } from "@prisma/client";
+import type { UpdateRestaurantInput } from "../types/restaurant.types";
 
 export class RestaurantRepository {
   constructor(private prisma: Prisma.TransactionClient) {}
@@ -24,6 +25,25 @@ export class RestaurantRepository {
     return this.prisma.restaurant.findFirst({
       where: {
         id: restaurantId
+      }
+    })
+  }
+
+  async updateRestaurant(data: UpdateRestaurantInput, restaurantId: string) {
+    return this.prisma.restaurant.update({
+      where: {
+        id: restaurantId
+      },
+      data: {
+        ...(data.name !== undefined && {
+            name: data.name,
+        }),
+        ...(data.address !== undefined && {
+            address: data.address,
+        }),
+        ...(data.name !== undefined && {
+            phone: data.phone,
+        }),
       }
     })
   }

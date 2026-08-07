@@ -10,6 +10,7 @@ import userRoutes from "./routes/user.routes";
 import categoryRoutes from "./routes/category.routes"
 import menuRoutes from "./routes/menu.routes"
 import orderRoutes from "./routes/order.routes"
+import restaurantRoutes from "./routes/restaurant.routes"
 import { errorHandler } from "./middleware/errorHandler"
 
 const app = express()
@@ -32,7 +33,8 @@ app.use("/",
   userRoutes,
   categoryRoutes,
   menuRoutes,
-  orderRoutes
+  orderRoutes,
+  restaurantRoutes
 );
 
 app.use("/auth", authRoutes);
