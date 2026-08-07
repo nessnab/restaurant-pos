@@ -7,7 +7,7 @@ export function authorize(...allowedRoles: string[]) {
       throw new AppError("Unauthenticated", 401);
     }
     if (!allowedRoles.includes(req.user.role)) {
-      throw new AppError("Unauthorized", 403);
+      throw new AppError("Forbidden", 403);
     }
     next();
   };

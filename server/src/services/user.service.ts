@@ -20,8 +20,16 @@ export class UserService {
 
   async getUserById(
     id: string,
+    restaurantId: string
   ) {
-    const user = await this.userRepository.findById(id)
+    const user = await this.userRepository.findById(
+      id,
+      restaurantId
+    )
+    console.log("user", user)
+    if (!user) {
+      throw new AppError("User not found", 404)
+    }
     return user
   }
 

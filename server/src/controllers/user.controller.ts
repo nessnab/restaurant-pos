@@ -6,7 +6,7 @@ export class UserController {
   constructor(private userService: UserService){}
 
   async getUserById(
-    req: Request,
+    req: Request<{ id: string }>,
     res: Response,
     next: NextFunction,
   ) {
@@ -14,7 +14,10 @@ export class UserController {
       if (!req.user) {
         throw new AppError("Unauthenticated", 401)
       }
-      const result = await this.userService.getUserById(req.user.id)
+      const result = await this.userService.getUserById(
+        req.params.id,
+        req.user.restaurantId,
+      )
       res.status(200).json(result)
     } catch (error) {
       next(error)
